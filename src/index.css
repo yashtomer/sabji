@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #2E7D32;
+  --color-accent: #FF6F00;
+  --color-golden: #F9A825;
+  --color-neutral: #F5F5F0;
+  --color-dark: #1B2A1B;
+  --font-headline: "Plus Jakarta Sans", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-label: "DM Sans", sans-serif;
+  --radius-DEFAULT: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+}
+
+@layer utilities {
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+body {
+  min-height: max(884px, 100dvh);
+}
