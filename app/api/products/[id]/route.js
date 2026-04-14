@@ -14,6 +14,9 @@ export async function PUT(request, { params }) {
     const updates = {};
     if (body.price !== undefined) updates.price = body.price;
     if (body.available !== undefined) updates.available = body.available;
+    if (body.name !== undefined) updates.name = body.name;
+    if (body.unit !== undefined) updates.unit = body.unit;
+    if (body.hindi !== undefined) updates.hindi = body.hindi;
 
     if (Object.keys(updates).length === 0) {
       return NextResponse.json({ error: 'No fields to update' }, { status: 400 });

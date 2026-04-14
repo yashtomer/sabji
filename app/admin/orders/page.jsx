@@ -10,6 +10,7 @@ export default function AdminOrders() {
   const router = useRouter();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     if (!user || user.role !== 'admin') {
@@ -28,6 +29,12 @@ export default function AdminOrders() {
   }, [token]);
 
   if (!user || user.role !== 'admin') return null;
+
+  const filteredOrders = orders.filter(o => {
+    if (!search.trim()) return true;
+    const q = search.toLowerCase();
+    return o.order_id?.toLowerCase().includes(q) || o.customer_name?.toLowerCase().includes(q) || o.items?.some(i => i.name?.toLowerCase().includes(q));
+  });
 
   const updateStatus = async (id, field, value) => {
     await fetch(`/api/orders/${id}/status`, {
@@ -60,6 +67,15 @@ export default function AdminOrders() {
         </div>
       </div>
 
+      {/* Search */}
+      <div style={{ padding: '12px 16px 0' }}>
+        <div className="search-warm flex items-center" style={{ gap: 10, padding: '8px 14px' }}>
+          <span className="material-symbols-outlined text-muted" style={{ fontSize: 18 }}>search</span>
+          <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search order ID, customer..." className="flex-1 outline-none bg-transparent text-soil placeholder:text-dim font-body font-500" style={{ fontSize: 14 }} />
+          {search && <button onClick={() => setSearch('')} className="text-muted hover:text-soil"><span className="material-symbols-outlined" style={{ fontSize: 16 }}>close</span></button>}
+        </div>
+      </div>
+
       {/* Orders list */}
       <div style={{ padding: '12px 16px', flex: 1 }}>
         {loading ? (
@@ -72,9 +88,9 @@ export default function AdminOrders() {
           </div>
         ) : (
           <>
-            <p className="font-body font-500 text-muted" style={{ fontSize: 10, marginBottom: 12 }}>{orders.length} orders</p>
+            <p className="font-body font-500 text-muted" style={{ fontSize: 10, marginBottom: 12 }}>{filteredOrders.length} of {orders.length} orders</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {orders.map(order => (
+              {filteredOrders.map(order => (
                 <div key={order.id} className="card-flat" style={{ padding: 14 }}>
                   <div className="flex items-center justify-between" style={{ marginBottom: 8 }}>
                     <div>

@@ -1,5 +1,7 @@
 import "./globals.css";
+import { Suspense } from "react";
 import Providers from "@/components/Providers";
+import RouteLoader from "@/components/RouteLoader";
 
 export const metadata = {
   title: "Sanjay - Fruits & Vegetables | Farm Fresh, Daily Delivered",
@@ -14,6 +16,9 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <Providers>
+          <Suspense>
+            <RouteLoader />
+          </Suspense>
           <div className="app-shell">
             {children}
           </div>

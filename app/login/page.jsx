@@ -151,6 +151,10 @@ export default function Login() {
       </div>
 
       <div className="text-center" style={{ padding: '0 20px 24px' }}>
+        <div className="flex items-center justify-center" style={{ gap: 6, marginBottom: 8 }}>
+          <span className="material-symbols-outlined text-forest" style={{ fontSize: 14, fontVariationSettings: "'FILL' 1" }}>call</span>
+          <a href="tel:+917557445816" className="font-body font-600 text-forest" style={{ fontSize: 12, textDecoration: 'none' }}>+91 75574 45816</a>
+        </div>
         <p className="font-body text-dim" style={{ fontSize: 9 }}>Farm Fresh, Daily Delivered</p>
       </div>
     </div>
