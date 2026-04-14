@@ -8,7 +8,7 @@ export async function GET(request) {
     if (!user) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
 
     const supabase = createServerClient();
-    const { data } = await supabase.from('users').select('id, username, name, role, phone').eq('id', user.id).single();
+    const { data } = await supabase.from('users').select('id, username, name, role, phone, address').eq('id', user.id).single();
     return NextResponse.json(data);
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
