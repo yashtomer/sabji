@@ -42,6 +42,7 @@ export default function Checkout() {
   ];
 
   const [submitting, setSubmitting] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
 
   const handleSubmit = async () => {
     if (!form.fullName || !form.phone || !form.address) { alert('Please fill in all shipping details'); return; }
@@ -61,8 +62,9 @@ export default function Checkout() {
       });
       const data = await res.json();
       if (res.ok) {
-        clearCart();
+        setOrderPlaced(true);
         sessionStorage.setItem('orderData', JSON.stringify({ order: data.order, upi: data.upi }));
+        clearCart();
         router.push(`/order-confirmed?orderId=${data.order.order_id}&amount=${data.order.total}`);
       } else {
         alert(data.error || 'Failed to place order');
@@ -75,12 +77,12 @@ export default function Checkout() {
   };
 
   useEffect(() => {
-    if (cart.length === 0) {
+    if (cart.length === 0 && !orderPlaced) {
       router.push('/');
     }
-  }, [cart.length, router]);
+  }, [cart.length, orderPlaced, router]);
 
-  if (cart.length === 0) return null;
+  if (cart.length === 0 && !orderPlaced) return null;
 
   return (
     <div className="flex flex-col min-h-screen bg-parchment grain">
