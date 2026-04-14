@@ -142,15 +142,29 @@ export default function Home() {
                 <span className="font-body font-500 text-soil/60" style={{ fontSize: 12 }}>Need help? Call us</span>
               </div>
               <p className="font-display font-700 text-forest" style={{ fontSize: 14, marginBottom: 16 }}>+91 98765 43210</p>
-              {user && <p className="font-body font-500 text-muted" style={{ fontSize: 10, marginBottom: 8 }}>Signed in as <span className="font-600 text-soil">{user.name}</span></p>}
-              <button
-                onClick={() => { setMenuOpen(false); logout(); router.push('/login'); }}
-                className="w-full flex items-center justify-center text-terra hover:bg-terra/5 transition-colors font-body font-600"
-                style={{ gap: 8, padding: '10px 0', borderRadius: 12, border: '1px solid var(--color-terra)', fontSize: 12 }}
-              >
-                <span className="material-symbols-outlined" style={{ fontSize: 16 }}>logout</span>
-                Sign Out
-              </button>
+              {user ? (
+                <>
+                  <p className="font-body font-500 text-muted" style={{ fontSize: 10, marginBottom: 8 }}>Signed in as <span className="font-600 text-soil">{user.name}</span></p>
+                  <button
+                    onClick={() => { setMenuOpen(false); logout(); router.push('/login'); }}
+                    className="w-full flex items-center justify-center text-terra hover:bg-terra/5 transition-colors font-body font-600"
+                    style={{ gap: 8, padding: '10px 0', borderRadius: 12, border: '1px solid var(--color-terra)', fontSize: 12 }}
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>logout</span>
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="w-full flex items-center justify-center text-forest hover:bg-forest/5 transition-colors font-body font-600"
+                  style={{ gap: 8, padding: '10px 0', borderRadius: 12, border: '1px solid var(--color-forest)', fontSize: 12, textDecoration: 'none' }}
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>login</span>
+                  Sign In
+                </Link>
+              )}
               <p className="font-body text-muted text-center" style={{ fontSize: 9, marginTop: 12 }}>&copy; 2026 Sanjay. All rights reserved.</p>
             </div>
           </div>

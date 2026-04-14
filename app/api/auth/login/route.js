@@ -7,15 +7,24 @@ export async function POST(request) {
   try {
     const { username, password } = await request.json();
     if (!username || !password) {
-      return NextResponse.json({ error: 'Username and password required' }, { status: 400 });
+      return NextResponse.json({ error: 'Phone number and password required' }, { status: 400 });
     }
 
     const supabase = createServerClient();
-    const { data: users, error } = await supabase
+    // Try matching by phone first, then by username
+    let { data: users, error } = await supabase
       .from('users')
       .select('*')
-      .eq('username', username.toLowerCase())
+      .eq('phone', username)
       .limit(1);
+
+    if (!users?.length) {
+      ({ data: users, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('username', username.toLowerCase())
+        .limit(1));
+    }
 
     if (error || !users?.length) {
       return NextResponse.json({ error: 'Invalid username or password' }, { status: 401 });
