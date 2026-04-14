@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sabji-nextjs",
+      "runtimeExecutable": "/Users/admin/.nvm/versions/node/v20.20.0/bin/npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000,
+      "env": {
+        "PATH": "/Users/admin/.nvm/versions/node/v20.20.0/bin:/usr/local/bin:/usr/bin:/bin"
+      }
+    }
+  ]
+}
