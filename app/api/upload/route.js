@@ -17,21 +17,24 @@ export async function POST(request) {
       return NextResponse.json({ error: 'File and productId required' }, { status: 400 });
     }
 
+    // Convert File to ArrayBuffer for Supabase
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
     const supabase = createServerClient();
 
-    // Upload to Supabase Storage
-    const ext = file.name.split('.').pop() || 'jpg';
+    const ext = file.name?.split('.').pop() || 'jpg';
     const fileName = `product-${productId}-${Date.now()}.${ext}`;
 
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('products')
-      .upload(fileName, file, {
-        contentType: file.type,
+      .upload(fileName, buffer, {
+        contentType: file.type || 'image/jpeg',
         upsert: true,
       });
 
     if (uploadError) {
-      return NextResponse.json({ error: uploadError.message }, { status: 500 });
+      return NextResponse.json({ error: 'Upload failed: ' + uploadError.message }, { status: 500 });
     }
 
     // Get public URL
@@ -45,7 +48,7 @@ export async function POST(request) {
       .eq('id', productId);
 
     if (dbError) {
-      return NextResponse.json({ error: dbError.message }, { status: 500 });
+      return NextResponse.json({ error: 'DB update failed: ' + dbError.message }, { status: 500 });
     }
 
     return NextResponse.json({ url: imageUrl });
