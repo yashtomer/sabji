@@ -12,16 +12,27 @@ export default function Checkout() {
   const [selectedSlot, setSelectedSlot] = useState('early');
   const [form, setForm] = useState({ fullName: '', phone: '', address: '' });
 
-  // Auto-fill from user profile
+  // Auto-fill from fresh profile data
   useEffect(() => {
-    if (user) {
-      setForm(prev => ({
-        fullName: prev.fullName || user.name || '',
-        phone: prev.phone || user.phone || '',
-        address: prev.address || user.address || '',
-      }));
+    if (token) {
+      fetch('/api/profile', { headers: { Authorization: `Bearer ${token}` } })
+        .then(r => r.json())
+        .then(profile => {
+          if (profile && !profile.error) {
+            setForm({
+              fullName: profile.name || '',
+              phone: profile.phone || '',
+              address: profile.address || '',
+            });
+          }
+        })
+        .catch(() => {
+          if (user) setForm({ fullName: user.name || '', phone: user.phone || '', address: user.address || '' });
+        });
+    } else if (user) {
+      setForm({ fullName: user.name || '', phone: user.phone || '', address: user.address || '' });
     }
-  }, [user]);
+  }, [token]);
 
   const steps = ['DELIVERY', 'PAYMENT', 'REVIEW'];
   const slots = [

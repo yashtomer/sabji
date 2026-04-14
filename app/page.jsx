@@ -114,7 +114,6 @@ export default function Home() {
             <nav className="flex-1" style={{ padding: '12px 0' }}>
               {[
                 { icon: 'storefront', label: 'Shop', href: '/' },
-                { icon: 'category', label: 'Categories', href: '/categories' },
                 { icon: 'shopping_bag', label: 'My Cart', href: '/cart' },
                 { icon: 'receipt_long', label: 'My Orders', href: '/orders' },
                 { icon: 'person', label: 'Profile', href: '/profile' },
