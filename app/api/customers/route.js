@@ -14,7 +14,7 @@ export async function GET(request) {
     // Get all customers
     const { data: customers } = await supabase
       .from('users')
-      .select('id, username, name, phone, role, created_at')
+      .select('id, username, name, phone, role, address, created_at')
       .eq('role', 'customer')
       .order('name');
 

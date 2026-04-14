@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import AppDrawer from '@/components/AppDrawer';
 
@@ -110,13 +111,14 @@ export default function AdminCustomers() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <p className="font-body text-muted" style={{ fontSize: 10 }}>{filtered.length} results</p>
             {filtered.map(c => (
-              <div key={c.id} className="card-flat" style={{ padding: 14 }}>
-                <div className="flex items-start justify-between" style={{ marginBottom: 8 }}>
+              <Link key={c.id} href={`/admin/customers/${c.id}`} className="card-flat" style={{ padding: 14, textDecoration: 'none', display: 'block' }}>
+                <div className="flex items-start justify-between" style={{ marginBottom: 6 }}>
                   <div>
                     <p className="font-display font-700 text-soil" style={{ fontSize: 15 }}>{c.name}</p>
                     <p className="font-body text-muted" style={{ fontSize: 11, marginTop: 2 }}>
                       {c.phone ? `+91 ${c.phone}` : c.username}
                     </p>
+                    {c.address && <p className="font-body text-muted" style={{ fontSize: 10, marginTop: 2 }}>📍 {c.address}</p>}
                   </div>
                   {c.pendingBalance > 0 ? (
                     <span className="font-body font-700 text-terra bg-terra/8" style={{ fontSize: 10, padding: '3px 10px', borderRadius: 8 }}>
@@ -150,7 +152,7 @@ export default function AdminCustomers() {
                     <p className="font-body text-muted" style={{ fontSize: 9 }}>Total</p>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
