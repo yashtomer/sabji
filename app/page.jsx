@@ -116,7 +116,7 @@ export default function Home() {
                 { icon: 'storefront', label: 'Shop', href: '/' },
                 { icon: 'category', label: 'Categories', href: '/categories' },
                 { icon: 'shopping_bag', label: 'My Cart', href: '/cart' },
-                { icon: 'receipt_long', label: 'My Orders', href: '/cart' },
+                { icon: 'receipt_long', label: 'My Orders', href: '/orders' },
                 { icon: 'person', label: 'Profile', href: '/profile' },
                 ...(user?.role === 'admin' ? [
                   { icon: 'assignment', label: 'Admin Orders', href: '/admin/orders' },

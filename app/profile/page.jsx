@@ -46,7 +46,7 @@ export default function Profile() {
       <div style={{ flex: 1, padding: '20px 16px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {[
-            { icon: 'shopping_bag', label: 'My Orders', href: '/cart', desc: 'View your order history' },
+            { icon: 'shopping_bag', label: 'My Orders', href: '/orders', desc: 'View your order history' },
             { icon: 'location_on', label: 'Delivery Address', href: '#', desc: 'Manage your addresses' },
             { icon: 'headset_mic', label: 'Help & Support', href: '#', desc: 'Get help with your orders' },
             ...(user.role === 'admin' ? [
