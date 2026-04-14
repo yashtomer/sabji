@@ -3,8 +3,8 @@ import { createServerClient } from '@/lib/supabase';
 import { getUserFromRequest } from '@/lib/auth';
 import QRCode from 'qrcode';
 
-const UPI_ID = process.env.UPI_ID || 'BHARATPE.9MOLOJOG6Y902434@unitype';
-const MERCHANT = process.env.UPI_MERCHANT_NAME || 'Sanjay Fruits';
+const UPI_ID = process.env.UPI_ID || '7557445816@pthdfc';
+const MERCHANT = process.env.UPI_MERCHANT_NAME || 'Sanjay Sah';
 
 export async function POST(request) {
   try {
@@ -31,7 +31,7 @@ export async function POST(request) {
       });
     }
 
-    const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT)}&am=${total.toFixed(2)}&cu=INR&tn=${encodeURIComponent('Order ' + orderId)}`;
+    const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT)}&am=${total.toFixed(2)}&tr=${orderId}&tn=${encodeURIComponent('Order ' + orderId)}&cu=INR`;
     const qrCode = await QRCode.toDataURL(upiUrl, { width: 280, margin: 2 });
 
     return NextResponse.json({

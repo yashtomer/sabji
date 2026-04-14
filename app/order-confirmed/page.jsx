@@ -7,14 +7,34 @@ import { QRCodeSVG } from 'qrcode.react';
 export default function OrderConfirmed() {
   const [order, setOrder] = useState(null);
   const [upi, setUpi] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const data = JSON.parse(sessionStorage.getItem('orderData') || '{}');
-    if (data.order) setOrder(data.order);
-    if (data.upi) setUpi(data.upi);
+    // Try sessionStorage first
+    try {
+      const data = JSON.parse(sessionStorage.getItem('orderData') || '{}');
+      if (data.order) setOrder(data.order);
+      if (data.upi) setUpi(data.upi);
+      if (data.order) { setLoading(false); return; }
+    } catch {}
+
+    // Fallback: check URL params
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('orderId');
+    const amount = params.get('amount');
+    if (orderId && amount) {
+      setOrder({ order_id: orderId, total: parseFloat(amount) });
+      // Fetch QR from API
+      fetch(`/api/upi/qr?amount=${amount}&orderId=${orderId}`)
+        .then(r => r.json())
+        .then(data => { if (data.upiUrl) setUpi(data); })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
   }, []);
 
-  const orderId = order?.order_id || `#SBJ-${Math.floor(10000 + Math.random() * 90000)}`;
+  const orderId = order?.order_id || '#SBJ-00000';
   const total = order?.total || 0;
 
   return (
@@ -38,7 +58,7 @@ export default function OrderConfirmed() {
 
         <h2 className="font-display font-800 text-soil text-center anim-fade-up" style={{ fontSize: 22, animationDelay: '200ms' }}>Order Placed!</h2>
         <p className="font-body text-muted text-center anim-fade-up" style={{ fontSize: 12, marginTop: 4, animationDelay: '300ms' }}>
-          Scan the QR code below to pay via UPI
+          {upi ? 'Scan the QR code below to pay via UPI' : loading ? 'Loading payment...' : 'Your order has been placed successfully'}
         </p>
 
         {/* UPI QR Code */}
@@ -71,17 +91,27 @@ export default function OrderConfirmed() {
           </div>
         )}
 
+        {/* Loading QR */}
+        {loading && !upi && (
+          <div className="w-full card-flat text-center" style={{ marginTop: 20, padding: 32 }}>
+            <span className="material-symbols-outlined text-muted animate-spin" style={{ fontSize: 28 }}>progress_activity</span>
+            <p className="font-body text-muted" style={{ fontSize: 12, marginTop: 8 }}>Generating QR code...</p>
+          </div>
+        )}
+
         {/* Order info */}
-        <div className="flex w-full anim-fade-up" style={{ gap: 10, marginTop: 16, animationDelay: '500ms' }}>
-          <div className="flex-1 card-flat text-center" style={{ padding: 12 }}>
-            <p className="font-body font-600 text-muted uppercase" style={{ fontSize: 8, letterSpacing: '0.12em' }}>Order ID</p>
-            <p className="font-display font-800 text-soil" style={{ fontSize: 13, marginTop: 4 }}>{orderId}</p>
+        {order && (
+          <div className="flex w-full anim-fade-up" style={{ gap: 10, marginTop: 16, animationDelay: '500ms' }}>
+            <div className="flex-1 card-flat text-center" style={{ padding: 12 }}>
+              <p className="font-body font-600 text-muted uppercase" style={{ fontSize: 8, letterSpacing: '0.12em' }}>Order ID</p>
+              <p className="font-display font-800 text-soil" style={{ fontSize: 13, marginTop: 4 }}>{orderId}</p>
+            </div>
+            <div className="flex-1 card-flat text-center" style={{ padding: 12 }}>
+              <p className="font-body font-600 text-muted uppercase" style={{ fontSize: 8, letterSpacing: '0.12em' }}>Estimated</p>
+              <p className="font-display font-800 text-soil" style={{ fontSize: 13, marginTop: 4 }}>35{'\u2013'}45 mins</p>
+            </div>
           </div>
-          <div className="flex-1 card-flat text-center" style={{ padding: 12 }}>
-            <p className="font-body font-600 text-muted uppercase" style={{ fontSize: 8, letterSpacing: '0.12em' }}>Estimated</p>
-            <p className="font-display font-800 text-soil" style={{ fontSize: 13, marginTop: 4 }}>35{'\u2013'}45 mins</p>
-          </div>
-        </div>
+        )}
 
         {/* Back to home */}
         <div className="w-full anim-fade-up" style={{ marginTop: 20, marginBottom: 32, animationDelay: '600ms' }}>
@@ -89,9 +119,6 @@ export default function OrderConfirmed() {
             Back to Home
           </Link>
         </div>
-
-        <p className="font-body text-muted" style={{ fontSize: 11, marginBottom: 8 }}>Need help?</p>
-        <button className="font-body font-600 text-forest hover:underline" style={{ fontSize: 12, marginBottom: 32 }}>Contact Support</button>
       </div>
     </div>
   );

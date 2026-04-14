@@ -63,7 +63,7 @@ export default function Checkout() {
       if (res.ok) {
         clearCart();
         sessionStorage.setItem('orderData', JSON.stringify({ order: data.order, upi: data.upi }));
-        router.push('/order-confirmed');
+        router.push(`/order-confirmed?orderId=${data.order.order_id}&amount=${data.order.total}`);
       } else {
         alert(data.error || 'Failed to place order');
       }
