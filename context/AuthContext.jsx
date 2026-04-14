@@ -14,6 +14,11 @@ export function AuthProvider({ children }) {
     return localStorage.getItem('sabji_token') || null;
   });
 
+  const saveUser = (u) => {
+    setUser(u);
+    localStorage.setItem('sabji_user', JSON.stringify(u));
+  };
+
   const login = async (username, password) => {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
@@ -22,11 +27,13 @@ export function AuthProvider({ children }) {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);
-    setUser(data.user);
+    // Fetch full profile with address
+    const profileRes = await fetch('/api/profile', { headers: { Authorization: `Bearer ${data.token}` } });
+    const profile = profileRes.ok ? await profileRes.json() : data.user;
+    saveUser(profile);
     setToken(data.token);
-    localStorage.setItem('sabji_user', JSON.stringify(data.user));
     localStorage.setItem('sabji_token', data.token);
-    return data.user;
+    return profile;
   };
 
   const register = async (username, password, name, phone) => {
@@ -37,11 +44,22 @@ export function AuthProvider({ children }) {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);
-    setUser(data.user);
+    saveUser({ ...data.user, phone: phone || '' });
     setToken(data.token);
-    localStorage.setItem('sabji_user', JSON.stringify(data.user));
     localStorage.setItem('sabji_token', data.token);
     return data.user;
+  };
+
+  const updateProfile = async (updates) => {
+    const res = await fetch('/api/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(updates),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    saveUser(data);
+    return data;
   };
 
   const logout = () => {
@@ -52,7 +70,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

@@ -16,7 +16,7 @@ export async function POST(request) {
     const { data, error } = await supabase
       .from('users')
       .insert({ username: username.toLowerCase(), password: hashed, name, role: 'customer', phone: phone || '' })
-      .select('id, username, name, role')
+      .select('id, username, name, role, phone')
       .single();
 
     if (error) {

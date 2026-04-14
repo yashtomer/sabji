@@ -40,7 +40,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       token,
-      user: { id: user.id, username: user.username, name: user.name, role: user.role },
+      user: { id: user.id, username: user.username, name: user.name, role: user.role, phone: user.phone || '' },
     });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });

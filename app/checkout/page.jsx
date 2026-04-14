@@ -8,9 +8,20 @@ import { useAuth } from '@/context/AuthContext';
 export default function Checkout() {
   const router = useRouter();
   const { cart, getSubtotal, getDeliveryFee, getDiscount, getTotal, getCartCount, clearCart } = useCart();
-  const { token } = useAuth();
+  const { user, token } = useAuth();
   const [selectedSlot, setSelectedSlot] = useState('early');
   const [form, setForm] = useState({ fullName: '', phone: '', address: '' });
+
+  // Auto-fill from user profile
+  useEffect(() => {
+    if (user) {
+      setForm(prev => ({
+        fullName: prev.fullName || user.name || '',
+        phone: prev.phone || user.phone || '',
+        address: prev.address || user.address || '',
+      }));
+    }
+  }, [user]);
 
   const steps = ['DELIVERY', 'PAYMENT', 'REVIEW'];
   const slots = [

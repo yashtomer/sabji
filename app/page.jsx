@@ -184,14 +184,22 @@ export default function Home() {
               <p className="font-body text-muted font-500" style={{ fontSize: 10, lineHeight: 1 }}>Fruits & Vegetables</p>
             </div>
           </div>
-          <Link href="/cart" className="relative rounded-xl hover:bg-soil/5 transition-colors" style={{ padding: 6 }}>
-            <span className="material-symbols-outlined text-soil/60" style={{ fontSize: 20 }}>shopping_bag</span>
-            {cartCount > 0 && (
-              <span className="absolute bg-terra text-white font-body font-bold flex items-center justify-center rounded-full anim-bounce-in shadow-sm" style={{ fontSize: 10, width: 16, height: 16, top: -2, right: -2 }}>
-                {cartCount}
-              </span>
+          <div className="flex items-center" style={{ gap: 10 }}>
+            {user && (
+              <Link href="/profile" className="flex items-center hover:bg-soil/5 transition-colors" style={{ gap: 4, padding: '4px 8px', borderRadius: 10, textDecoration: 'none' }}>
+                <span className="material-symbols-outlined text-forest" style={{ fontSize: 18, fontVariationSettings: "'FILL' 1" }}>person</span>
+                <span className="font-body font-600 text-soil" style={{ fontSize: 12 }}>{user.name}</span>
+              </Link>
             )}
-          </Link>
+            <Link href="/cart" className="relative rounded-xl hover:bg-soil/5 transition-colors" style={{ padding: 6 }}>
+              <span className="material-symbols-outlined text-soil/60" style={{ fontSize: 20 }}>shopping_bag</span>
+              {cartCount > 0 && (
+                <span className="absolute bg-terra text-white font-body font-bold flex items-center justify-center rounded-full anim-bounce-in shadow-sm" style={{ fontSize: 10, width: 16, height: 16, top: -2, right: -2 }}>
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          </div>
         </div>
         <div className="h-px bg-gradient-to-r from-transparent via-khaki to-transparent" />
       </header>
