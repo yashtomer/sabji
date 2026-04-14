@@ -78,7 +78,7 @@ export default function Home() {
 
   const extraFruits = [
     { name: 'Amrud', price: '\u20B9120', image: 'https://images.unsplash.com/photo-1536511132770-e5058c7e8c46?w=400&h=400&fit=crop' },
-    { name: 'Chikoo', price: '\u20B9100', image: 'https://images.unsplash.com/photo-1611183060658-e03b3616eab6?w=400&h=400&fit=crop' },
+    { name: 'Chikoo', price: '\u20B9100', image: 'https://images.unsplash.com/photo-1478369402113-1fd53f17e8b4?w=400&h=400&fit=crop' },
     { name: 'Pineapple', price: '\u20B9100', image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400&h=400&fit=crop' },
   ];
 
@@ -117,7 +117,7 @@ export default function Home() {
                 { icon: 'category', label: 'Categories', href: '/categories' },
                 { icon: 'shopping_bag', label: 'My Cart', href: '/cart' },
                 { icon: 'receipt_long', label: 'My Orders', href: '/cart' },
-                { icon: 'person', label: 'Profile', href: '/cart' },
+                { icon: 'person', label: 'Profile', href: '/profile' },
                 ...(user?.role === 'admin' ? [
                   { icon: 'assignment', label: 'Admin Orders', href: '/admin/orders' },
                   { icon: 'inventory_2', label: 'Admin Inventory', href: '/admin/inventory' },
@@ -142,7 +142,7 @@ export default function Home() {
                 <span className="material-symbols-outlined text-forest" style={{ fontSize: 16, fontVariationSettings: "'FILL' 1" }}>headset_mic</span>
                 <span className="font-body font-500 text-soil/60" style={{ fontSize: 14 }}>Need help? Call us</span>
               </div>
-              <p className="font-display font-700 text-forest" style={{ fontSize: 16, marginBottom: 16 }}>+91 88605 90166</p>
+              <p className="font-display font-700 text-forest" style={{ fontSize: 16, marginBottom: 16 }}>+91 75574 45816</p>
               {user ? (
                 <>
                   <p className="font-body font-500 text-muted" style={{ fontSize: 12, marginBottom: 8 }}>Signed in as <span className="font-600 text-soil">{user.name}</span></p>
@@ -457,7 +457,7 @@ export default function Home() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   <div className="flex items-center" style={{ gap: 8 }}>
                     <span className="material-symbols-outlined text-white/25" style={{ fontSize: 14 }}>phone</span>
-                    <span className="font-body text-white/50" style={{ fontSize: 13 }}>+91 88605 90166</span>
+                    <span className="font-body text-white/50" style={{ fontSize: 13 }}>+91 75574 45816</span>
                   </div>
                   <div className="flex items-center" style={{ gap: 8 }}>
                     <span className="material-symbols-outlined text-white/25" style={{ fontSize: 14 }}>mail</span>
@@ -465,7 +465,7 @@ export default function Home() {
                   </div>
                   <div className="flex items-start" style={{ gap: 8 }}>
                     <span className="material-symbols-outlined text-white/25" style={{ fontSize: 14, marginTop: 1 }}>location_on</span>
-                    <span className="font-body text-white/50" style={{ fontSize: 13, lineHeight: 1.4 }}>Ghaziabad, Indirapuram, Near Supertech Ecovillage Exit Gate</span>
+                    <span className="font-body text-white/50" style={{ fontSize: 13, lineHeight: 1.4 }}>Indirapuram, Ghaziabad, Near Supertech Icon Exit Gate</span>
                   </div>
                 </div>
               </div>
