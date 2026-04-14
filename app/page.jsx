@@ -28,22 +28,22 @@ const ORGANIC_IDS = [5, 6, 11, 15];
 const TESTIMONIALS = [
   {
     name: 'Priya Sharma',
-    location: 'Sector 45, Gurgaon',
-    text: 'The vegetables are always so fresh! Morning delivery is the best.',
+    location: 'Indirapuram, Ghaziabad',
+    text: 'Azadpur mandi quality at my doorstep! Sabji is always fresh and prices are best.',
     rating: 5,
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face',
   },
   {
     name: 'Rahul Verma',
-    location: 'DLF Phase 3',
-    text: 'Farm-fresh produce at my door. Prices are very reasonable!',
+    location: 'Vaishali, Sector 4',
+    text: 'Same day delivery in Vaishali! Mandi fresh sabji at reasonable prices.',
     rating: 5,
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
   },
   {
     name: 'Anita Desai',
-    location: 'Sohna Road',
-    text: 'Best delivery service! The organic options are fantastic.',
+    location: 'Crossing Republik',
+    text: 'Best vegetable delivery near Indirapuram. Organic options are fantastic!',
     rating: 4,
     avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face',
   },
@@ -77,7 +77,7 @@ export default function Home() {
 
   const extraFruits = [
     { name: 'Amrud', price: '\u20B9120', image: 'https://images.unsplash.com/photo-1536511132770-e5058c7e8c46?w=400&h=400&fit=crop' },
-    { name: 'Chikoo', price: '\u20B9100', image: 'https://images.unsplash.com/photo-1618399093507-cd498ff7e6c5?w=400&h=400&fit=crop' },
+    { name: 'Chikoo', price: '\u20B9100', image: 'https://images.unsplash.com/photo-1611183060658-e03b3616eab6?w=400&h=400&fit=crop' },
     { name: 'Pineapple', price: '\u20B9100', image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400&h=400&fit=crop' },
   ];
 
@@ -226,8 +226,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- SEARCH --- */}
-        <div className="anim-fade-up" style={{ ...S.mx, marginBottom: 16, animationDelay: '140ms' }}>
+        {/* --- SEARCH WITH AUTOCOMPLETE --- */}
+        <div className="anim-fade-up" style={{ ...S.mx, marginBottom: 16, animationDelay: '140ms', position: 'relative', zIndex: 30 }}>
           <div className="search-warm flex items-center" style={{ gap: 10, padding: '10px 16px' }}>
             <span className="material-symbols-outlined text-muted" style={{ fontSize: 18 }}>search</span>
             <input
@@ -244,6 +244,32 @@ export default function Home() {
               </button>
             )}
           </div>
+          {/* Autocomplete dropdown */}
+          {searchQuery.trim().length > 0 && (() => {
+            const q = searchQuery.toLowerCase();
+            const matches = products.filter(p => p.name.toLowerCase().includes(q) || (p.hindi && p.hindi.includes(q))).slice(0, 5);
+            if (matches.length === 0) return null;
+            return (
+              <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 4, background: 'white', borderRadius: 16, border: '1px solid var(--color-khaki)', boxShadow: '0 8px 24px rgba(45,24,16,0.1)', overflow: 'hidden', zIndex: 31 }}>
+                {matches.map(p => (
+                  <button
+                    key={p.id}
+                    onClick={() => { setSearchQuery(p.name); }}
+                    style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 10, padding: '10px 14px', textAlign: 'left', borderBottom: '1px solid var(--color-khaki)', background: 'none', border: 'none', cursor: 'pointer', transition: 'background 0.15s' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'var(--color-sand)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                  >
+                    <img src={p.image} alt="" style={{ width: 36, height: 36, borderRadius: 10, objectFit: 'cover' }} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p className="font-display font-700 text-soil" style={{ fontSize: 12, lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
+                      <p className="font-body text-muted" style={{ fontSize: 10 }}>{p.unit}</p>
+                    </div>
+                    <span className="price" style={{ fontSize: 14, flexShrink: 0 }}><span className="sym">₹</span>{p.price}</span>
+                  </button>
+                ))}
+              </div>
+            );
+          })()}
         </div>
 
         {/* --- BENEFITS STRIP --- */}

@@ -2,16 +2,19 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-const navItems = [
-  { href: '/', icon: 'storefront', label: 'Shop' },
-  { href: '/categories', icon: 'category', label: 'Categories' },
-  { href: '/cart', icon: 'shopping_bag', label: 'Cart' },
-  { href: '/login', icon: 'person', label: 'Account' },
-];
+import { useAuth } from '@/context/AuthContext';
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  const accountHref = user ? (user.role === 'admin' ? '/admin/orders' : '/cart') : '/login';
+
+  const navItems = [
+    { href: '/', icon: 'storefront', label: 'Shop' },
+    { href: '/cart', icon: 'shopping_bag', label: 'Cart' },
+    { href: accountHref, icon: 'person', label: user ? user.name : 'Account' },
+  ];
 
   const isActive = (href) => {
     if (href === '/') return pathname === '/';
@@ -19,20 +22,28 @@ export default function BottomNav() {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto z-50" style={{ padding: '0 12px 10px' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          height: 62,
-          borderRadius: 20,
-          background: 'rgba(255,255,255,0.97)',
-          backdropFilter: 'blur(16px)',
-          border: '1px solid var(--color-khaki)',
-          boxShadow: '0 -2px 24px rgba(45,24,16,0.06), 0 4px 16px rgba(45,24,16,0.04)',
-        }}
-      >
+    <nav style={{
+      position: 'fixed',
+      bottom: 0,
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: '100%',
+      maxWidth: 430,
+      zIndex: 50,
+      padding: '0 14px 14px',
+    }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        height: 62,
+        borderRadius: 22,
+        background: 'rgba(255,250,245,0.92)',
+        backdropFilter: 'blur(20px) saturate(1.4)',
+        WebkitBackdropFilter: 'blur(20px) saturate(1.4)',
+        border: '1px solid rgba(232,224,212,0.7)',
+        boxShadow: '0 -4px 30px rgba(45,24,16,0.05), 0 2px 8px rgba(45,24,16,0.03)',
+      }}>
         {navItems.map((item) => {
           const active = isActive(item.href);
           return (
@@ -44,38 +55,35 @@ export default function BottomNav() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '6px 16px',
-                borderRadius: 14,
-                position: 'relative',
                 textDecoration: 'none',
-                transition: 'all 0.25s ease',
-                background: active ? 'var(--color-forest)' : 'transparent',
-                minWidth: 60,
+                padding: active ? '8px 24px' : '8px 20px',
+                borderRadius: 16,
+                background: active ? 'linear-gradient(160deg, var(--color-leaf) 0%, var(--color-forest) 100%)' : 'transparent',
+                boxShadow: active ? '0 2px 12px rgba(26,58,42,0.2)' : 'none',
+                transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
               }}
             >
-              {/* Icon */}
               <span
                 className="material-symbols-outlined"
                 style={{
-                  fontSize: 22,
+                  fontSize: 23,
                   color: active ? '#fff' : 'var(--color-dim)',
                   fontVariationSettings: active ? "'FILL' 1" : "'FILL' 0",
-                  transition: 'all 0.2s ease',
+                  transition: 'all 0.25s ease',
                 }}
               >
                 {item.icon}
               </span>
-
-              {/* Label */}
               <span
-                className="font-body"
                 style={{
-                  fontSize: 9,
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 11,
                   marginTop: 2,
-                  fontWeight: active ? 600 : 500,
+                  fontWeight: active ? 700 : 500,
                   color: active ? '#fff' : 'var(--color-dim)',
-                  transition: 'color 0.2s ease',
-                  letterSpacing: active ? '0.02em' : 0,
+                  transition: 'all 0.25s ease',
+                  letterSpacing: '0.02em',
+                  lineHeight: 1,
                 }}
               >
                 {item.label}

@@ -5,9 +5,17 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [allProducts, setAllProducts] = useState([]);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    if (typeof window === 'undefined') return [];
+    try { return JSON.parse(localStorage.getItem('sabji_cart') || '[]'); } catch { return []; }
+  });
   const [promoCode, setPromoCode] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
+
+  // Persist cart to localStorage
+  useEffect(() => {
+    localStorage.setItem('sabji_cart', JSON.stringify(cart));
+  }, [cart]);
 
   useEffect(() => {
     fetch('/api/products')
