@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
+import AppDrawer from '@/components/AppDrawer';
 
 export default function AdminInventory() {
   const { user, token, logout } = useAuth();
@@ -118,9 +119,7 @@ export default function AdminInventory() {
       <div className="bg-parchment/95 backdrop-blur-md sticky top-0 z-40" style={{ borderBottom: '1px solid var(--color-khaki)' }}>
         <div className="flex items-center justify-between" style={{ padding: '12px 20px' }}>
           <div className="flex items-center" style={{ gap: 12 }}>
-            <Link href="/admin/orders" className="text-soil/50" style={{ padding: 4 }}>
-              <span className="material-symbols-outlined" style={{ fontSize: 20 }}>arrow_back</span>
-            </Link>
+            <AppDrawer />
             <div>
               <h1 className="font-display font-800 text-soil" style={{ fontSize: 17 }}>Inventory</h1>
               <p className="font-body text-muted" style={{ fontSize: 10 }}>{availableCount} of {localProducts.length} items live</p>

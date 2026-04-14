@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import AppDrawer from '@/components/AppDrawer';
 import { useAuth } from '@/context/AuthContext';
 
 export default function AdminOrders() {
@@ -56,9 +57,12 @@ export default function AdminOrders() {
       {/* Header */}
       <div className="bg-parchment/95 backdrop-blur-md sticky top-0 z-40" style={{ borderBottom: '1px solid var(--color-khaki)' }}>
         <div className="flex items-center justify-between" style={{ padding: '12px 20px' }}>
-          <div>
-            <h1 className="font-display font-800 text-soil" style={{ fontSize: 17 }}>Orders</h1>
-            <p className="font-body text-muted" style={{ fontSize: 10 }}>Admin Dashboard</p>
+          <div className="flex items-center" style={{ gap: 12 }}>
+            <AppDrawer />
+            <div>
+              <h1 className="font-display font-800 text-soil" style={{ fontSize: 17 }}>Orders</h1>
+              <p className="font-body text-muted" style={{ fontSize: 10 }}>Admin Dashboard</p>
+            </div>
           </div>
           <Link href="/admin/inventory" className="bg-forest/8 text-forest flex items-center font-body font-600" style={{ padding: '6px 12px', borderRadius: 10, gap: 4, fontSize: 11 }}>
             <span className="material-symbols-outlined" style={{ fontSize: 14 }}>inventory_2</span>

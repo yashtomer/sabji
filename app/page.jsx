@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import ProductCard from '@/components/ProductCard';
 import BottomNav from '@/components/BottomNav';
+import AppDrawer from '@/components/AppDrawer';
 
 const S = { page: { padding: '0 16px' }, mx: { marginLeft: 16, marginRight: 16 } };
 
@@ -51,12 +51,10 @@ const TESTIMONIALS = [
 
 export default function Home() {
   const { products, addToCart, getCartCount } = useCart();
-  const { user, logout } = useAuth();
-  const router = useRouter();
+  const { user } = useAuth();
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const filtered = products.filter(p => {
     if (activeCategory === 'All') return true;
@@ -86,98 +84,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-parchment grain">
-      {/* --- MOBILE DRAWER --- */}
-      {menuOpen && (
-        <>
-          {/* Backdrop */}
-          <div
-            onClick={() => setMenuOpen(false)}
-            style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(45,24,16,0.35)', backdropFilter: 'blur(4px)', animation: 'fadeUp 0.2s ease both' }}
-          />
-          {/* Drawer */}
-          <div
-            className="bg-parchment shadow-2xl flex flex-col"
-            style={{ position: 'fixed', top: 0, left: 0, zIndex: 201, height: '100%', width: 280, animation: 'slideRight 0.3s cubic-bezier(0.22, 1, 0.36, 1) both' }}
-          >
-            {/* Drawer header */}
-            <div className="flex items-center justify-between" style={{ padding: '16px 20px', borderBottom: '1px solid var(--color-khaki)' }}>
-              <div className="flex items-center" style={{ gap: 4 }}>
-                <h2 className="font-display font-800 text-forest" style={{ fontSize: 20 }}>Sanjay</h2>
-                <span className="font-body text-muted font-500" style={{ fontSize: 12, marginLeft: 4 }}>Fruits & Vegetables</span>
-              </div>
-              <button onClick={() => setMenuOpen(false)} className="text-soil/40 hover:text-soil transition-colors" style={{ padding: 4 }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>close</span>
-              </button>
-            </div>
-
-            {/* Nav links */}
-            <nav className="flex-1" style={{ padding: '12px 0' }}>
-              {[
-                { icon: 'storefront', label: 'Shop', href: '/' },
-                { icon: 'shopping_bag', label: 'My Cart', href: '/cart' },
-                { icon: 'receipt_long', label: 'My Orders', href: '/orders' },
-                { icon: 'person', label: 'Profile', href: '/profile' },
-                ...(user?.role === 'admin' ? [
-                  { icon: 'assignment', label: 'Admin Orders', href: '/admin/orders' },
-                  { icon: 'inventory_2', label: 'Admin Inventory', href: '/admin/inventory' },
-                ] : []),
-              ].map(item => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  onClick={() => setMenuOpen(false)}
-                  className={`flex items-center hover:bg-forest/5 transition-colors ${item.label.startsWith('Admin') ? 'text-forest' : 'text-soil/70 hover:text-forest'}`}
-                  style={{ gap: 14, padding: '12px 20px' }}
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: 20 }}>{item.icon}</span>
-                  <span className="font-body font-500" style={{ fontSize: 16 }}>{item.label}</span>
-                </Link>
-              ))}
-            </nav>
-
-            {/* Drawer footer */}
-            <div style={{ padding: '16px 20px', borderTop: '1px solid var(--color-khaki)' }}>
-              <div className="flex items-center" style={{ gap: 8, marginBottom: 12 }}>
-                <span className="material-symbols-outlined text-forest" style={{ fontSize: 16, fontVariationSettings: "'FILL' 1" }}>headset_mic</span>
-                <span className="font-body font-500 text-soil/60" style={{ fontSize: 14 }}>Need help? Call us</span>
-              </div>
-              <p className="font-display font-700 text-forest" style={{ fontSize: 16, marginBottom: 16 }}>+91 75574 45816</p>
-              {user ? (
-                <>
-                  <p className="font-body font-500 text-muted" style={{ fontSize: 12, marginBottom: 8 }}>Signed in as <span className="font-600 text-soil">{user.name}</span></p>
-                  <button
-                    onClick={() => { setMenuOpen(false); logout(); router.push('/login'); }}
-                    className="w-full flex items-center justify-center text-terra hover:bg-terra/5 transition-colors font-body font-600"
-                    style={{ gap: 8, padding: '10px 0', borderRadius: 12, border: '1px solid var(--color-terra)', fontSize: 14 }}
-                  >
-                    <span className="material-symbols-outlined" style={{ fontSize: 16 }}>logout</span>
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <Link
-                  href="/login"
-                  onClick={() => setMenuOpen(false)}
-                  className="w-full flex items-center justify-center text-forest hover:bg-forest/5 transition-colors font-body font-600"
-                  style={{ gap: 8, padding: '10px 0', borderRadius: 12, border: '1px solid var(--color-forest)', fontSize: 14, textDecoration: 'none' }}
-                >
-                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>login</span>
-                  Sign In
-                </Link>
-              )}
-              <p className="font-body text-muted text-center" style={{ fontSize: 11, marginTop: 12 }}>&copy; 2026 Sanjay. All rights reserved.</p>
-            </div>
-          </div>
-        </>
-      )}
 
       {/* --- HEADER --- */}
       <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50" style={{ animation: 'fadeUp 0.4s ease both' }}>
         <div className="flex justify-between items-center bg-parchment/95 backdrop-blur-md" style={{ height: 54, padding: '0 20px' }}>
           <div className="flex items-center" style={{ gap: 8 }}>
-            <button onClick={() => setMenuOpen(true)} className="text-soil/50 rounded-xl hover:bg-soil/5 transition-colors" style={{ padding: 4 }}>
-              <span className="material-symbols-outlined" style={{ fontSize: 20 }}>menu</span>
-            </button>
+            <AppDrawer />
             <div>
               <h1 className="font-display font-800 text-forest" style={{ fontSize: 19, letterSpacing: '-0.02em', lineHeight: 1 }}>Sanjay</h1>
               <p className="font-body text-muted font-500" style={{ fontSize: 10, lineHeight: 1 }}>Fruits & Vegetables</p>
@@ -185,8 +97,14 @@ export default function Home() {
           </div>
           <div className="flex items-center" style={{ gap: 10 }}>
             {user && (
-              <Link href="/profile" className="flex items-center hover:bg-soil/5 transition-colors" style={{ gap: 4, padding: '4px 8px', borderRadius: 10, textDecoration: 'none' }}>
-                <span className="material-symbols-outlined text-forest" style={{ fontSize: 18, fontVariationSettings: "'FILL' 1" }}>person</span>
+              <Link href="/profile" className="flex items-center hover:bg-soil/5 transition-colors" style={{ gap: 5, padding: '3px 8px 3px 3px', borderRadius: 10, textDecoration: 'none' }}>
+                <div style={{ width: 24, height: 24, borderRadius: 8, overflow: 'hidden', background: 'var(--color-sand)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {user.avatar ? (
+                    <img src={user.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <span className="material-symbols-outlined text-forest" style={{ fontSize: 14, fontVariationSettings: "'FILL' 1" }}>person</span>
+                  )}
+                </div>
                 <span className="font-body font-600 text-soil" style={{ fontSize: 12 }}>{user.name}</span>
               </Link>
             )}
